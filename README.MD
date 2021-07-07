@@ -5,10 +5,15 @@ SDRecords is an easy way to access data that is stored in data Records on the SD
 The format of the data is whatever you decide but for an example let's use that shown below:-
 
 struct DataType {
+
   unsigned long Count;
+  
   int Bits;
+  
   float Volts;
+  
   float Amps;
+  
 };
 
 DataType myData;
