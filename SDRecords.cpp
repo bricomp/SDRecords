@@ -11,6 +11,8 @@
                          It is the responsibility of the user code to examine and reset or ignore this variable.
                        - Improved BeginRecords Error reporting.
                        - Added error reporting for NumberOfRecords if the fileSeze does not match the use of Records
+    vs 0.4  04/07/2021 - Corrected Error Reporting in Init;
+    vs 0.5  07/07/2021 - Corrected problem with NumberOfRecords
 */
 #include "Arduino.h"
 #include <SD.h>
@@ -20,8 +22,8 @@
     bool SDRecords::init(uint8_t chipSelect)
     {
         // see if the card is present and can be initialized:
-        errorOccurred = SD.begin(chipSelect);
-        return errorOccurred;
+        errorOccurred = !SD.begin(chipSelect);
+        return !errorOccurred;
     }
 
     SDRecordType SDRecords::BeginRecords( const char* filepath, uint16_t recordSize ) {
@@ -49,6 +51,7 @@
     int SDRecords::numberOfRecords(SDRecordType rec) {
         ulong   fSize;
 
+        fSize = rec.recordFile.size();
         if ((fSize % rec.recordSize) != 0) {
             rec.errCode = File_Size_Does_Not_Match_Records;
             errorOccurred = true;

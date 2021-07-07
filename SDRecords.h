@@ -11,6 +11,8 @@
                          It is the responsibility of the user code to examine and reset or ignore this variable.
                        - Improved BeginRecords Error reporting.
                        - Added error reporting for NumberOfRecords if the fileSeze does not match the use of Records
+    vs 0.4  04/07/2021 - Corrected Error Reporting in Init;
+    vs 0.5  07/07/2021 - Corrected problem with NumberOfRecords
 */
 
 #ifndef SDRecords_h
@@ -19,7 +21,7 @@
 #include "Arduino.h"
 #include <SD.h>
 
-const char SDRecords_vs[4] = { "0.3" };
+const char SDRecords_vs[4] = { "0.5" };
 
 typedef struct SDRecordType {
     File        recordFile;
