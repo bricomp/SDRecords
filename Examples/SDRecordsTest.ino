@@ -53,58 +53,74 @@ void setup()
 //Create a recordFile, name it and set the Record Size (in Bytes. Max Size = sizeof(uin16_t)
 
     SDRecordFile1  = records.BeginRecords("RecTest", recordDataSize);    
-    if (SDRecordFile1.errCode != NoError) {
-        errRpt.DecodeError(SDRecordFile1);
-    }
-    
-    for (int n = 0; n < 20; n++) {
-        for (int i = 0; i < recordDataSize; i++) {                       
+    if (SDRecordFile1.errCode == NoError) {
 
-            //Fill an array[i] with data
+        int n = 0;
+        while ((!records.errorOccurred) && (n < 20)) {
+            for (int i = 0; i < recordDataSize; i++) {
+                //Fill an array[i] with data
+                dataArray[i] = n;
+            };
 
-            dataArray[i] = n;
-        };
-
-//Write the data from dataArray into SDRecordFile1, at record Location n (record locations start at 0)
-        
-        if (records.WrRecord(SDRecordFile1, n, dataArray)) {}           
-    }
-
-    Serial.println("20 records stored in File RecTest on SD Card in ascending order.");
-    Serial.println();
-    Serial.println("Now read them back and put into File RecTest2 on SD Card");
-    Serial.println("in inverse order thereby proving read works as well.");
-    Serial.println();
-
-    SDRecordFile2 = records.BeginRecords("RecTest2", recordDataSize);
-    if (SDRecordFile2.errCode != NoError) {
-        errRpt.DecodeError(SDRecordFile1);
-    }
-    int r = 0;
-    for (int n = 19; n >= 0; n--) {
-
-//Read from SDRecordFile1
-
-        if (records.RdRecord(SDRecordFile1, n, dataArray)) {
-
-            Serial.print("Writing to Record ");
-            Serial.println(r);
-
-            //..and write into SDRecordFile2
-
-            if (records.WrRecord(SDRecordFile2, r, dataArray)) {
-                r = r + 1;
+            //Write the data from dataArray into SDRecordFile1, at record Location n (record locations start at 0)
+            Serial.print("Writing data to record array, record "); Serial.println(n);
+            if (!records.WrRecord(SDRecordFile1, n, dataArray)) {
+                Serial.print("Unable to write record "); Serial.print(n); Serial.println(" to RecTest file.");
             }
-            else {
-                errRpt.DecodeError(SDRecordFile2);
-                errRpt.PrintRecordInfo(SDRecordFile2);
-            }
-        } 
-        else {
-            errRpt.DecodeError(SDRecordFile1);
-            errRpt.PrintRecordInfo(SDRecordFile1);
+            n++;
         }
+
+        if (!records.errorOccurred) {
+            Serial.println();
+            Serial.println("20 records stored in File RecTest on SD Card in ascending order.");
+            Serial.println();
+            Serial.println("Now read them back and put into File RecTest2 on SD Card");
+            Serial.println("in inverse order thereby proving read works as well.");
+            Serial.println();
+
+            SDRecordFile2 = records.BeginRecords("RecTest2", recordDataSize);
+            if (SDRecordFile2.errCode == NoError) {
+                int o = 0;   //o for out
+                int i = 19;  //i for in
+                while ((!records.errorOccurred) && (o < 20)) {
+
+                    //Read from SDRecordFile1
+                    Serial.print("Reading from RecTest file, Record "); Serial.print(i);
+
+                    if (records.RdRecord(SDRecordFile1, i, dataArray)) {
+
+                        Serial.print(", writing to RecTest2 File, Record "); Serial.print(o);
+
+                        //..and write into SDRecordFile2
+
+                        if (!records.WrRecord(SDRecordFile2, o, dataArray)) {
+                            Serial.println();  Serial.print("----- Unable to write record "); Serial.print(o); Serial.print(" to RecTest2 file.");
+                        }
+                    } else {
+                         Serial.print("----- Unable to read record "); Serial.print(i); Serial.print(" from RecTest file.");
+                         errRpt.DecodeError(SDRecordFile2);
+                         errRpt.PrintRecordInfo(SDRecordFile2);
+                    }
+                    i = i - 1;
+                    o = o + 1;
+                    Serial.println();
+                }
+            } else {
+
+                Serial.println("Unable to open file RecTest2");
+                errRpt.DecodeError(SDRecordFile1);
+            }
+        } else {
+            errRpt.DecodeError(SDRecordFile2);
+        }
+
+    } else {
+        Serial.println("Unable to open file RecTest");
+        errRpt.DecodeError(SDRecordFile1);
     }
+
+    Serial.print("Number of Records in RecTest  "); Serial.println( records.numberOfRecords( SDRecordFile1 ));
+    Serial.print("Number of Records in RecTest2 "); Serial.println( records.numberOfRecords( SDRecordFile1 ));
 
 //Close the SDRecordFiles
 

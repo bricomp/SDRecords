@@ -28,20 +28,20 @@
 
     SDRecordType SDRecords::BeginRecords( const char* filepath, size_t recordSize ) {
         RecordType rec;
-        size_t   fSize;
+        size_t     fSize;
 
         rec.errCode          = NoError;
         rec.recordFile       = SD.open(filepath, FILE_WRITE);
         rec.errCodeExpansion = 0;
         if (!rec.recordFile) {
-            rec.errCode = Cannot_Open_Record_File;
+            rec.errCode   = Cannot_Open_Record_File;
             errorOccurred = true;
         }
         else {
             rec.recordSize = recordSize;
             fSize = rec.recordFile.size();
             if ((fSize % rec.recordSize) != 0) {
-                rec.errCode = File_Size_Does_Not_Match_Records;
+                rec.errCode   = File_Size_Does_Not_Match_Records;
                 errorOccurred = true;
             }
         }
@@ -53,15 +53,16 @@
 
         fSize = rec.recordFile.size();
         if ((fSize % rec.recordSize) != 0) {
-            rec.errCode = File_Size_Does_Not_Match_Records;
-            errorOccurred = true;
+            rec.errCodeExpansion = fSize;
+            rec.errCode          = File_Size_Does_Not_Match_Records;
+            errorOccurred        = true;
         }
         return ( rec.recordFile.size() / rec.recordSize );
     }
 
     bool SDRecords::WrRecord(SDRecordType rec, size_t recNumber, const void* buf) {
 
-        bool    okState = true;
+        bool    err = false;
         size_t  bytesWritten;
 
         rec.errCodeExpansion = 0;
@@ -71,20 +72,20 @@
             if ( bytesWritten != rec.recordSize) {
                 rec.errCodeExpansion    = bytesWritten;
                 rec.errCode             = Cannot_Write_Record_to_File;
-                okState = false; 
+                err                     = true; 
             }
         }
         else {
             rec.errCode = Cannot_Seek_to_file_position;
-            okState = false; 
+            err = true; 
         }
-        errorOccurred = ( errorOccurred && okState ); 
-        return okState;
+        errorOccurred = ( errorOccurred && err ); 
+        return !err;
     }
 
     bool SDRecords::RdRecord(SDRecordType rec, size_t recNumber, void* buf) {
 
-        bool okState = true;
+        bool err = false;
         size_t  bytesRead;
 
         rec.errCodeExpansion = 0;
@@ -93,16 +94,16 @@
             bytesRead = rec.recordFile.read(buf, rec.recordSize);
             if ( bytesRead != rec.recordSize ) {
                 rec.errCodeExpansion = bytesRead;
-                rec.errCode = Cannot_Read_Record_from_File;
-                okState = false;
+                rec.errCode          = Cannot_Read_Record_from_File;
+                err                 = true;
             }
         }
         else {
             rec.errCode = Cannot_Seek_to_file_position;
-            okState     = false;
+            err         = true;
         }
-        errorOccurred = ( errorOccurred && okState );
-        return okState;
+        errorOccurred = ( errorOccurred && err );
+        return !err;
     }
 
     void SDRecords::CloseRecord( SDRecordType rec) {
