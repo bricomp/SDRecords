@@ -26,9 +26,9 @@
         return !errorOccurred;
     }
 
-    SDRecordType SDRecords::BeginRecords( const char* filepath, uint16_t recordSize ) {
+    SDRecordType SDRecords::BeginRecords( const char* filepath, size_t recordSize ) {
         RecordType rec;
-        ulong   fSize;
+        size_t   fSize;
 
         rec.errCode          = NoError;
         rec.recordFile       = SD.open(filepath, FILE_WRITE);
@@ -49,7 +49,7 @@
     }
 
     int SDRecords::numberOfRecords(SDRecordType rec) {
-        ulong   fSize;
+        size_t   fSize;
 
         fSize = rec.recordFile.size();
         if ((fSize % rec.recordSize) != 0) {
@@ -59,7 +59,7 @@
         return ( rec.recordFile.size() / rec.recordSize );
     }
 
-    bool SDRecords::WrRecord(SDRecordType rec, uint16_t recNumber, const void* buf) {
+    bool SDRecords::WrRecord(SDRecordType rec, size_t recNumber, const void* buf) {
 
         bool    okState = true;
         size_t  bytesWritten;
@@ -82,7 +82,7 @@
         return okState;
     }
 
-    bool SDRecords::RdRecord(SDRecordType rec, uint16_t recNumber, void* buf) {
+    bool SDRecords::RdRecord(SDRecordType rec, size_t recNumber, void* buf) {
 
         bool okState = true;
         size_t  bytesRead;

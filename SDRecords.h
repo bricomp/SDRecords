@@ -25,7 +25,7 @@ const char SDRecords_vs[4] = { "0.5" };
 
 typedef struct SDRecordType {
     File        recordFile;
-    uint16_t    recordSize;
+    size_t    recordSize;
     uint8_t     errCode;
     size_t      errCodeExpansion;
 } RecordType;
@@ -48,13 +48,13 @@ public:
 
     bool init(uint8_t chipSelect = BUILTIN_SDCARD);
 
-    SDRecordType BeginRecords(const char* filepath, uint16_t recordSize);
+    SDRecordType BeginRecords(const char* filepath, size_t recordSize);
 
     int numberOfRecords(SDRecordType rec);
 
-    bool WrRecord(SDRecordType rec, uint16_t recNumber, const void* buf);
+    bool WrRecord(SDRecordType rec, size_t recNumber, const void* buf);
 
-    bool RdRecord(SDRecordType rec, uint16_t recNumber, void* buf);
+    bool RdRecord(SDRecordType rec, size_t recNumber, void* buf);
 
     void CloseRecord(SDRecordType rec);
 
