@@ -22,7 +22,7 @@ In order to start saving `myData` structures to `SDRecords` we first have to cre
 SDRecords records;
 ```
 
-We also need a way to address/recognize our `SDRecords` and they are created from `RecortTypes`.
+We also need a way to address/recognize our `SDRecords` and they are created from `SDRecortTypes`.
 The structure of the record type is shown below:-
 
 ```
@@ -31,12 +31,12 @@ typedef struct SDRecordType {
     size_t      recordSize;
     uint8_t     errCode;
     size_t      errCodeExpansion;
-} RecordType;
+} SDRecordType;
 ```
 
 TODO INCLUDE 
 
-When `we` open a `RecordFile` it creates an SD File. This is stored in `recordFile`. The Record Size is stored in `recordSize` and if an error occurs in any operation then an Error Code will be stored in `errCode`. There may be more information that could help in determining what caused the error and this is stored  in `errCodeExpansion`.
+When we open a `RecordFile` it creates an SD File. This is stored in `recordFile`. The Record Size is stored in `recordSize` and if an error occurs in any operation then an Error Code will be stored in `errCode`. There may be more information that could help in determining what caused the error and this is stored  in `errCodeExpansion`.
 
 There is one other important way of determining if an error has occurred and that is stored in the bool variable `errorOccurred`. Any errors stored in `recordFile.errCode` is local to the function that has just taken place. 
 The bool `errorOccurred` on the other hand is global to all `SDRecord` functions and once set is not reset. The only way to reset it is to address it in the main program and set it to false if, for example, the errors have been cleared by the sketch and it is safe to carry on.
@@ -56,7 +56,7 @@ Having initialized `SDREcords` we can now create/open a Record File.
 To do that the function `BeginRecords` is used as below:-
 
 ```
-  RecordType myDataRecordFile;
+  SDRecordType myDataRecordFile;
 
   myDataRecordFile = records.BeginRecords( "DataFile1", sizeOfDataRecord );
 ```

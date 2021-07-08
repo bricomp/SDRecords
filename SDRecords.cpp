@@ -27,8 +27,8 @@
     }
 
     SDRecordType SDRecords::BeginRecords( const char* filepath, size_t recordSize ) {
-        RecordType rec;
-        size_t     fSize;
+        SDRecordType rec;
+        size_t       fSize;
 
         rec.errCode          = NoError;
         rec.recordFile       = SD.open(filepath, FILE_WRITE);

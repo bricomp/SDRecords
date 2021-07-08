@@ -25,10 +25,10 @@ const char SDRecords_vs[4] = { "0.5" };
 
 typedef struct SDRecordType {
     File        recordFile;
-    size_t    recordSize;
+    size_t      recordSize;
     uint8_t     errCode;
     size_t      errCodeExpansion;
-} RecordType;
+} SDRecordType;
 
 enum errorCode {
     NoError = 1,
