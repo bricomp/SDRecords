@@ -17,7 +17,7 @@ const int  ledPin = 13;
 SDRecords       records;
 SDRecordsErrRpt errRpt;
 
-RecordType SDRecordFile1, SDRecordFile2;  //Create SDRecordFile variables
+SDRecordType SDRecordFile1, SDRecordFile2;  //Create SDRecordFile variables
 
 uint8_t    dataArray[16];
 uint8_t    emptyArray[16]{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
