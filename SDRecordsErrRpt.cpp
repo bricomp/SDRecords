@@ -7,7 +7,7 @@
 
     vs 0.1  02/07/2021 - Initial Trial Release
     vs 0.2  03/07/2021 - Added Cannot_Open_Record_File and File_Size_Does_Not_Match_Records reporting
-    vs 0.5  04/07.2021 - Just upped to 0.4 to keep in step with SDRecords
+    vs 0.6  10/07.2021 - Just upped to 0.6 to keep in step with SDRecords
 */
 #include "Arduino.h"
 #include "SDRecords.h"

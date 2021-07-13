@@ -13,6 +13,7 @@
                        - Added error reporting for NumberOfRecords if the fileSeze does not match the use of Records
     vs 0.4  04/07/2021 - Corrected Error Reporting in Init;
     vs 0.5  07/07/2021 - Corrected problem with NumberOfRecords
+    vs 0.6  10/07/2021 - Incorporated SdFat - Changed init to initSD and init SDfat
 */
 
 #ifndef SDRecords_h
@@ -20,8 +21,9 @@
 
 #include "Arduino.h"
 #include <SD.h>
+//#include <SdFat.h>
 
-const char SDRecords_vs[4] = { "0.5" };
+const char SDRecords_vs[4] = { "0.6" };
 
 typedef struct SDRecordType {
     File        recordFile;
@@ -46,8 +48,40 @@ public:
 
     bool errorOccurred;
 
-    bool init(uint8_t chipSelect = BUILTIN_SDCARD);
+    bool initSD(uint8_t chipSelect = BUILTIN_SDCARD);
 
+    /** Initialize SD card and file system.
+    *
+    * \param[in] csPin SD card chip select pin.
+    * \return true for success or false for failure.
+    */
+    bool initSDfat(SdCsPin_t csPin = SS);
+
+    //----------------------------------------------------------------------------
+    /** Initialize SD card and file system.
+     *
+     * \param[in] csPin SD card chip select pin.
+     * \param[in] maxSck Maximum SCK frequency.
+     * \return true for success or false for failure.
+     */
+    bool initSDfat(SdCsPin_t csPin, uint32_t maxSck);
+
+    //----------------------------------------------------------------------------
+    /** Initialize SD card and file system for SPI mode.
+     *
+     * \param[in] spiConfig SPI configuration.
+     * \return true for success or false for failure.
+     */
+    bool initSDfat(SdSpiConfig spiConfig);
+
+    //---------------------------------------------------------------------------
+    /** Initialize SD card and file system for SDIO mode.
+     *
+     * \param[in] sdioConfig SDIO configuration.
+     * \return true for success or false for failure.
+     */
+    bool initSDfat(SdioConfig sdioConfig);
+    
     SDRecordType BeginRecords(const char* filepath, size_t recordSize);
 
     int numberOfRecords(SDRecordType rec);

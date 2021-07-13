@@ -13,16 +13,34 @@
                        - Added error reporting for NumberOfRecords if the fileSeze does not match the use of Records
     vs 0.4  04/07/2021 - Corrected Error Reporting in Init;
     vs 0.5  07/07/2021 - Corrected problem with NumberOfRecords
+    vs 0.6  10/07/2021 - Incorporated SdFat - Changed init to initSD and init SDfat
 */
 #include "Arduino.h"
 #include <SD.h>
-#include <SPI.h>
 #include "SDRecords.h"
 
-    bool SDRecords::init(uint8_t chipSelect)
-    {
+    bool SDRecords::initSD(uint8_t chipSelect) {
         // see if the card is present and can be initialized:
         errorOccurred = !SD.begin(chipSelect);
+        return !errorOccurred;
+    }
+
+    bool SDRecords::initSDfat(SdCsPin_t csPin = SS){
+        errorOccurred = !SD.sdfs.begin( csPin );
+        return !errorOccurred;
+    }
+
+    bool SDRecords::initSDfat(SdCsPin_t csPin, uint32_t maxSck){
+        errorOccurred = !SD.sdfs.begin(csPin, maxSck);
+        return !errorOccurred;
+    }
+
+    bool SDRecords::initSDfat(SdSpiConfig spiConfig){
+        errorOccurred = !SD.sdfs.begin(spiConfig);
+        return !errorOccurred;
+    }
+    bool SDRecords::initSDfat(SdioConfig sdioConfig) {
+        errorOccurred = !SD.sdfs.begin(sdioConfig);
         return !errorOccurred;
     }
 
