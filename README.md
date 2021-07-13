@@ -22,7 +22,7 @@ In order to start saving `myData` structures to `SDRecords` we first have to cre
 SDRecords records;
 ```
 
-We also need a way to address/recognize our `SDRecords` and they are created from `SDRecortType`s.
+We also need a way to address/recognize our `SDRecords`. They are created from `SDRecortType`s.
 The structure of the record type is shown below:-
 
 ```
